@@ -1,6 +1,7 @@
 package request_response;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class ControllerTest {
 		assertEquals(res.getFieldValue("model"), "Ecosport");
 	}
 	
-	@Test
+/*	@Test
 	public void ifNotInDBThenReturnTheDefaultPassedInTheRequest() {
 		String vin = "vin-1";
 		Document document = new Document()
@@ -67,4 +68,57 @@ public class ControllerTest {
 		assertEquals(res.getFieldValue("model"), "Ecosport");
 	}
 	
+	@Test
+	public void ifNothingHasDefaultKeyShouldNotBeInResponse() {
+		String vin = "vin-1";
+		Document document = new Document();
+		when(repo.getValues(vin)).thenReturn(document);
+		Request req = new Request();
+		req.addField("model");
+		Response res = c.doCalculation(req, vin);
+		assertFalse(res.getKeys().contains("model"));
+	}
+	
+	@Test
+	public void checkDBHasHighestPriority() {
+		String vin = "vin-1";
+		Document document = new Document().addField("model", "Ecosport");
+		when(repo.getValues(vin)).thenReturn(document);
+		when(cache.getDefault("model")).thenReturn("Figo");
+		Request req = new Request();
+		req.addFieldWithDefault("model", "Endeavour");
+		Response res = c.doCalculation(req, vin);
+		assertEquals(res.getFieldValue("model"), "Ecosport");
+	}
+
+	@Test
+	public void checkRequestHasSecondPriority() {
+		String vin = "vin-1";
+		Document document = new Document();
+		when(repo.getValues(vin)).thenReturn(document);
+		when(cache.getDefault("model")).thenReturn("Figo");
+		Request req = new Request();
+		req.addFieldWithDefault("model", "Endeavour");
+		Response res = c.doCalculation(req, vin);
+		assertEquals(res.getFieldValue("model"), "Endeavour");
+	}
+
+	@Test
+	public void combinedTest() {
+		String vin = "vin-1";
+		Document document = new Document().addField("model", "Ecosport");
+		when(repo.getValues(vin)).thenReturn(document);
+		when(cache.getDefault("isElectric")).thenReturn("true");
+		Request req = new Request();
+		req.addField("model");
+		req.addFieldWithDefault("colour", "red");
+		req.addField("isElectric");
+		req.addField("canRemoteStart");
+		Response res = c.doCalculation(req, vin);
+		assertEquals(res.getFieldValue("model"), "Ecosport");
+		assertEquals(res.getFieldValue("colour"), "red");
+		assertEquals(res.getFieldValue("isElectric"), "true");
+		assertFalse(res.getKeys().contains("canRemoteStart"));
+	}*/
+
 }

@@ -1,9 +1,21 @@
 package request_response;
 
-public class Response {
+import java.util.Map;
+import java.util.Set;
 
-	public String getFieldValue(String string) {
-		return null;
+public class Response {
+	private Map<String, String> responseValues;
+
+	public Response(Map<String, String> responseValues) {
+		this.responseValues = responseValues;
+	}
+	
+	public Set<String> getKeys() {
+		return this.responseValues.keySet();
+	}
+	
+	public String getFieldValue(String key) {
+		return responseValues.get(key);
 	}
 
 }
