@@ -16,7 +16,10 @@ public class Document {
 	}
 	
 	public String getDocumentField(String key) {
-		return map.get(key);
+		if (map.containsKey(key)) {
+			return map.get(key);
+		}
+		throw new IllegalArgumentException();
 	}
 
 }

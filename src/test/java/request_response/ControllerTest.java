@@ -43,7 +43,7 @@ public class ControllerTest {
 		assertEquals(res.getFieldValue("model"), "Ecosport");
 	}
 	
-/*	@Test
+	@Test
 	public void ifNotInDBThenReturnTheDefaultPassedInTheRequest() {
 		String vin = "vin-1";
 		Document document = new Document()
@@ -84,7 +84,6 @@ public class ControllerTest {
 		String vin = "vin-1";
 		Document document = new Document().addField("model", "Ecosport");
 		when(repo.getValues(vin)).thenReturn(document);
-		when(cache.getDefault("model")).thenReturn("Figo");
 		Request req = new Request();
 		req.addFieldWithDefault("model", "Endeavour");
 		Response res = c.doCalculation(req, vin);
@@ -96,7 +95,6 @@ public class ControllerTest {
 		String vin = "vin-1";
 		Document document = new Document();
 		when(repo.getValues(vin)).thenReturn(document);
-		when(cache.getDefault("model")).thenReturn("Figo");
 		Request req = new Request();
 		req.addFieldWithDefault("model", "Endeavour");
 		Response res = c.doCalculation(req, vin);
@@ -119,6 +117,18 @@ public class ControllerTest {
 		assertEquals(res.getFieldValue("colour"), "red");
 		assertEquals(res.getFieldValue("isElectric"), "true");
 		assertFalse(res.getKeys().contains("canRemoteStart"));
-	}*/
-
+	}
+	
+	@Test
+	public void shouldSkipCacheIfItReturnsNetworkError() {
+		String vin = "vin-1";
+		Document document = new Document();
+		when(repo.getValues(vin)).thenReturn(document);
+		when(cache.getDefault("model")).thenThrow(new RuntimeException());
+		Request req = new Request();
+		req.addField("model");
+		Response res = c.doCalculation(req, vin);
+		assertFalse(res.getKeys().contains("model"));
+	}
+	
 }
